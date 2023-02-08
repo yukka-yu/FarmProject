@@ -1,0 +1,6 @@
+cat, Ryzhik, 3, red
+dog, Sharik, 2, black
+hamster, Dusya, 1, white
+horse, Lady, 5, brown
+camel, Sharuf, 7, beige
+donkey, Lucky, 3, grey
