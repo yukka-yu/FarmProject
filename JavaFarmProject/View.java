@@ -36,14 +36,11 @@ public class View {
     }
 
     void printDialog(int index) throws ParseException {
-        if ((index > 0) && (index <=3)){
             String [] arr = dialog.printDialog();
-            controller.addPet(index, arr[0],new SimpleDateFormat("yyyy-MM-dd").parse(arr[1]),arr[2]);
+            controller.addPet(index, arr[0], new SimpleDateFormat("yyyy-MM-dd").parse(arr[1]),arr[2]);
             System.out.println("Added!");
-        }
-        else if (index == 0) printMenu();
-        else System.out.println("Unexpected value");
     }
+
     private void viewAllPet(){
         for (Pet pet : controller.getAllPet()) {
             System.out.println(pet);
@@ -53,6 +50,7 @@ public class View {
    private void viewCommands(int id){
        System.out.println(controller.getCommands(id));
    }
+
    private int chooseAction(){
        Scanner scan = new Scanner(System.in);
        int choice = scan.nextInt();
@@ -65,31 +63,46 @@ public class View {
        while (flag) {
            printMenu();
            int choice = chooseAction();
-           switch (choice) {
-               case 1 -> viewAllPet();
-               case 2 -> {
-                   printDialogList();
-                   int choice1 = chooseAction();
-                   printDialog(choice1);
-                   break;
-               }
-               case 3 -> {
-                   viewAllPet();
-                   System.out.println("Enter the number of animal whose commands you want to see");
-                   int choice1 = chooseAction();
-                   System.out.println("This animal know commands:");
-                   viewCommands(choice1 - 1);
-                   break;
-               }
+           if ((choice >= 0) && (choice <= 4)) {
+               switch (choice) {
+                   case 1 -> viewAllPet();
+                   case 2 -> {
+                       printDialogList();
+                       int choice1 = chooseAction();
+                       if ((choice1 > 0) && (choice1 <=3)){
+                           printDialog(choice1);
+                       }
+                       else if (choice1 == 0) System.out.println("Return to main menu");
+                       else System.out.println("Unexpected value");
 
-               case 4 -> {
-                   viewAllPet();
-                   System.out.println("Enter the number of animal you want to train");
-                   int choice1 = chooseAction();
-                   controller.trainPet(choice1 - 1);
+                       break;
+                   }
+                   case 3 -> {
+                       viewAllPet();
+                       System.out.println("Enter the number of animal whose commands you want to see");
+                       int choice1 = chooseAction();
+                       if ((choice1 >= 1) && (choice1 < controller.getAllPet().size()+1)) {
+                           System.out.println("This animal know commands:");
+                           viewCommands(choice1 - 1);
+                       }
+                       else System.out.println("Unexpected animal number");
+                       break;
+                   }
+
+                   case 4 -> {
+                       viewAllPet();
+                       System.out.println("Enter the number of animal you want to train");
+                       int choice1 = chooseAction();
+                       if ((choice1 >= 1) && (choice1 < controller.getAllPet().size()+1)) {
+                           controller.trainPet(choice1 - 1);
+                       }
+                       else System.out.println("Unexpected animal number");
+                   }
+                   case 0 -> flag = false;
                }
-               case 0 -> flag = false;
            }
+           else System.out.println("Unexpected value. Try again!");
+
        }
    }
 }
